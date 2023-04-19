@@ -35,6 +35,23 @@ namespace MyFirstDemo.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Difficulties");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("3e1d541b-a205-429e-bb56-f50cecb2c9df"),
+                            Name = "Easy"
+                        },
+                        new
+                        {
+                            Id = new Guid("17b5b9e7-cf76-49a3-9f62-eba81363082b"),
+                            Name = "Medium"
+                        },
+                        new
+                        {
+                            Id = new Guid("2ae1794c-360e-4365-bd1d-3509875e9c6e"),
+                            Name = "Hard"
+                        });
                 });
 
             modelBuilder.Entity("MyFirstDemo.Api.Models.Domain.Region", b =>
@@ -57,6 +74,34 @@ namespace MyFirstDemo.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Regions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("78f28f34-abd5-4686-8a7b-fba4ce2fc8e4"),
+                            Code = "AKL",
+                            Name = "Auckland",
+                            RegionImageUrl = "Auckland.jpg"
+                        },
+                        new
+                        {
+                            Id = new Guid("6457b92f-6269-48ed-88e6-8740ceccb5c2"),
+                            Code = "BOP",
+                            Name = "Bay of Plenty"
+                        },
+                        new
+                        {
+                            Id = new Guid("fea2520a-c78a-4b40-8b28-c6b1f11a2331"),
+                            Code = "WGN",
+                            Name = "Wellington"
+                        },
+                        new
+                        {
+                            Id = new Guid("2ea3adbf-201a-4019-8726-44e873309375"),
+                            Code = "STL",
+                            Name = "SouthLand",
+                            RegionImageUrl = "SouthLand.png"
+                        });
                 });
 
             modelBuilder.Entity("MyFirstDemo.Api.Models.Domain.Walk", b =>
