@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,30 +14,36 @@ namespace MyFirstDemo.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+   
     public class RegionsController : ControllerBase
     {
         private readonly NZWalksDbContext dbContext;
         private readonly IRegionRepository regionRepository;
         private readonly IMapper mapper;
-        public RegionsController(NZWalksDbContext dbContext,IRegionRepository regionRepository,IMapper mapper)
+        private readonly ILogger<RegionsController> logger;
+
+        public RegionsController(NZWalksDbContext dbContext,IRegionRepository regionRepository,IMapper mapper, ILogger<RegionsController> logger)
         {
             this.dbContext = dbContext;
             this.regionRepository = regionRepository;
             this.mapper = mapper;
+            this.logger = logger;
         }
 
         [HttpGet]
+        [Authorize(Roles ="Reader")]
         public async Task<IActionResult> GetAll()
         {
             //Get data from database
             var regions =await regionRepository.GetAllAsync();
-
+            
             //Return DTOs
             return Ok(mapper.Map<List<RegionDto>>(regions));
         }
 
         [HttpGet]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Reader")]
         public async Task<IActionResult> GetById([FromRoute] Guid id) {
             //var region= dbContext.Regions.Find(id);
             var region =await regionRepository.GetByIdAsync(id);
@@ -50,6 +57,7 @@ namespace MyFirstDemo.Api.Controllers
 
         [HttpPost]
         [ValidateModel]
+        [Authorize(Roles = "Writer")]
         public async Task< IActionResult> Create([FromBody] AddRegionRequestDto addRegionRequestDto) {
           
                 //Map or convert DTO to Domain main
@@ -69,6 +77,7 @@ namespace MyFirstDemo.Api.Controllers
         [HttpPut]
         [Route("{id:Guid}")]
         [ValidateModel]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
         {
 
@@ -87,6 +96,7 @@ namespace MyFirstDemo.Api.Controllers
 
         [HttpDelete]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             //var region = dbContext.Regions.Find(id);
